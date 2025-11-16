@@ -3,32 +3,35 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const path = require('path');
 
-
 // routes
 const authRoutes = require('./routes/auth.routes');
 const chatRoutes = require('./routes/chat.routes');
 
-
-
 const app = express();
 
-
+// CORS for production + local
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: [
+        'http://localhost:5173',
+        'https://chatgpt-project-rqr8.onrender.com'
+    ],
     credentials: true,
 }));
 
-// uaing middlewares 
+// middlewares
 app.use(express.json());
 app.use(cookieParser());
+
+// serve frontend
 app.use(express.static(path.join(__dirname, '../public')));
 
-// using routes 
+// routes
 app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes);
 
-app.get('*name', (req, res) => {
-    res.sendFile(path.json(__dirname, '../public/index.html'));
+// fallback for react/vite routing
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 module.exports = app;
