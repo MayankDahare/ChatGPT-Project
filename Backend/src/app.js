@@ -24,4 +24,8 @@ app.use(cookieParser());
 app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes);
 
+app.get('*name', (req, res) => {
+    res.sendFile(path.json(__dirname, '../public/index.html'));
+});
+
 module.exports = app;
