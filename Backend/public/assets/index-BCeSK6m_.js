@@ -20602,7 +20602,7 @@ const Z_ = (l) => ({ id: zo(), title: "New Chat", messages: [] }),
         r(!0),
         console.log(l),
         Ne.post(
-          "https://cohort-1-project-chat-gpt.onrender.com/api/auth/register",
+          "https://chatgpt-project-rqr8.onrender.com/api/auth/register",
           {
             email: l.email,
             fullName: { firstName: l.firstname, lastName: l.lastname },
@@ -20747,7 +20747,7 @@ const Z_ = (l) => ({ id: zo(), title: "New Chat", messages: [] }),
         r(!0),
         console.log(l),
         Ne.post(
-          "https://cohort-1-project-chat-gpt.onrender.com/api/auth/login",
+          "https://chatgpt-project-rqr8.onrender.com/api/auth/login",
           { email: l.email, password: l.password },
           { withCredentials: !0 }
         )
