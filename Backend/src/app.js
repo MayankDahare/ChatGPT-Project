@@ -19,6 +19,7 @@ app.use(cors({
 // uaing middlewares 
 app.use(express.json());
 app.use(cookieParser());
+app.use(express.static(path.join(__dirname, '../public')));
 
 // using routes 
 app.use('/api/auth', authRoutes);
