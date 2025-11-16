@@ -29,9 +29,9 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes);
 
-// fallback for react/vite routing
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/index.html'));
+// fallback route for SPA (Express 5 fix)
+app.get(/.*/, (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 module.exports = app;
