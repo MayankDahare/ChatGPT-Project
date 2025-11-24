@@ -1,6 +1,7 @@
 const userModel = require('../models/user.model');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const OTP = require("../models/otp.model");   // <-- ADD THIS LINE
 
 function sendToken(user, res, message) {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
@@ -24,7 +25,27 @@ function sendToken(user, res, message) {
 }
 
 async function registerUser(req, res) {
-    const { fullName: { firstName, lastName }, email, password } = req.body;
+    const { fullName: { firstName, lastName }, email, password, otp } = req.body;
+
+    // ------------------------------------
+    // 🔥 1) OTP CHECK
+    // ------------------------------------
+    const otpDoc = await OTP.findOne({ email });
+
+    if (!otpDoc) {
+        return res.status(400).json({ message: "OTP not found" });
+    }
+
+    if (otpDoc.otp !== otp) {
+        return res.status(400).json({ message: "Invalid OTP" });
+    }
+
+    if (Date.now() > otpDoc.expiresAt) {
+        return res.status(400).json({ message: "OTP expired" });
+    }
+    // ------------------------------------
+    // 🔥 OTP verification complete
+    // ------------------------------------
 
     const isUserAlreadyExists = await userModel.findOne({ email });
 
@@ -39,6 +60,9 @@ async function registerUser(req, res) {
         email,
         password: hashedPassword
     });
+
+    // DELETE OTP after successful register
+    await OTP.deleteMany({ email });
 
     sendToken(user, res, "User registered successfully");
 }
