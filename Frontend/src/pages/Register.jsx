@@ -9,7 +9,6 @@ const Register = () => {
     const [otp, setOtp] = useState("");
 
     const navigate = useNavigate();
-
     const backend = "https://chatgpt-project-rqr8.onrender.com/api/auth";
 
     function handleChange(e) {
@@ -19,14 +18,14 @@ const Register = () => {
 
     // ⭐ Send OTP
     async function sendOtp() {
-        if (!form.email) return alert("Enter Gmail first");
+        if (!form.email) return alert("Please enter your Gmail first!");
 
         try {
             const res = await axios.post(`${backend}/send-otp`, { email: form.email });
-            alert(res.data.message);
+            alert("OTP has been sent to your Gmail!");
             setOtpSent(true);
         } catch (err) {
-            alert("Failed to send OTP");
+            alert("Failed to send OTP.");
         }
     }
 
@@ -48,11 +47,9 @@ const Register = () => {
                 withCredentials: true
             });
 
-            console.log(res);
             navigate("/");
 
         } catch (err) {
-            console.error(err);
             alert(err?.response?.data?.message || "Registration failed");
         }
 
@@ -83,19 +80,20 @@ const Register = () => {
                                 onChange={handleChange}
                                 required
                             />
+
                             <button type="button" className="primary-btn" onClick={sendOtp}>
                                 Send OTP
                             </button>
                         </div>
                     </div>
 
-                    {/* OTP INPUT (after sent) */}
+                    {/* OTP FIELD */}
                     {otpSent && (
                         <div className="field-group">
                             <label>Enter OTP</label>
                             <input
                                 type="text"
-                                placeholder="6 digit OTP"
+                                placeholder="Enter OTP"
                                 value={otp}
                                 onChange={(e) => setOtp(e.target.value)}
                                 required
@@ -106,22 +104,33 @@ const Register = () => {
                     <div className="grid-2">
                         <div className="field-group">
                             <label htmlFor="firstname">First name</label>
-                            <input id="firstname" name="firstname" placeholder="Jane"
-                                value={form.firstname} onChange={handleChange} required />
+                            <input id="firstname" name="firstname"
+                                value={form.firstname}
+                                onChange={handleChange}
+                                placeholder="Jane"
+                                required />
                         </div>
-
                         <div className="field-group">
                             <label htmlFor="lastname">Last name</label>
-                            <input id="lastname" name="lastname" placeholder="Doe"
-                                value={form.lastname} onChange={handleChange} required />
+                            <input id="lastname" name="lastname"
+                                value={form.lastname}
+                                onChange={handleChange}
+                                placeholder="Doe"
+                                required />
                         </div>
                     </div>
 
                     <div className="field-group">
                         <label htmlFor="password">Password</label>
-                        <input id="password" name="password" type="password"
-                            placeholder="Create a password" value={form.password}
-                            onChange={handleChange} required minLength={6} />
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            placeholder="Create a password"
+                            value={form.password}
+                            onChange={handleChange}
+                            required
+                        />
                     </div>
 
                     <button type="submit" className="primary-btn" disabled={submitting}>
